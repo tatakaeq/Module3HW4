@@ -4,8 +4,44 @@ namespace Module3HW4
 {
     public class Program
     {
+        private static Func<int, int, int>? _sumHandler;
+
+        public static void TryCatch(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public static int GetResult()
+        {
+            _sumHandler += (d, d1) => d + d1;
+            _sumHandler += (d, d1) => d + d1;
+
+            var sum = 0;
+            var result = _sumHandler.GetInvocationList();
+            foreach (var item in result)
+            {
+                var x = item.DynamicInvoke(7, 243);
+                sum += (int)x!;
+            }
+
+            return sum;
+        }
+
         public static void Main(string[] args)
         {
+            var result = 0;
+            TryCatch(() =>
+            {
+                result = GetResult();
+            });
+            Console.WriteLine(result);
             var users = new User[]
             {
                 new User()
